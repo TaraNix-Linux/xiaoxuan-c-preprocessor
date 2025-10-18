@@ -34,6 +34,8 @@ pub mod native_file_provider;
 pub mod prompt;
 
 pub use processor::process_source_file;
+pub use macro_map::MacroDefinition;
+pub use macro_map::MacroMap;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct TokenWithRange {

@@ -108,7 +108,7 @@ where
     processor.process_program(&program)?;
 
     let Context {
-        prompts, output, ..
+        prompts, output, macro_map, ..
     } = processor.context;
 
     // concatenates adjacent string literals
@@ -119,6 +119,7 @@ where
     let result = PreprocessResult {
         output: concatenated,
         prompts,
+        macros: macro_map,
     };
 
     Ok(result)
@@ -128,6 +129,7 @@ where
 pub struct PreprocessResult {
     pub output: Vec<TokenWithLocation>,
     pub prompts: Vec<Prompt>,
+    pub macros: crate::macro_map::MacroMap,
 }
 
 struct Processor<'a, T>

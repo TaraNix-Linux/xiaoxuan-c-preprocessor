@@ -4,6 +4,7 @@
 // the Mozilla Public License version 2.0 and additional exceptions.
 // For more details, see the LICENSE, LICENSE.additional, and CONTRIBUTING files.
 
+use core::iter::FusedIterator;
 use std::collections::HashMap;
 
 use crate::{
@@ -11,10 +12,12 @@ use crate::{
     lexer::lex_from_str, location::Location,
 };
 
+#[derive(Debug, PartialEq)]
 pub struct MacroMap {
     macros: HashMap<String, MacroDefinition>,
 }
 
+#[derive(Debug, PartialEq)]
 pub enum MacroDefinition {
     ObjectLike(Vec<TokenWithLocation>),
     FunctionLike(Vec<String>, Vec<TokenWithLocation>),
@@ -150,5 +153,15 @@ impl MacroMap {
             Some(_) => MacroManipulationResult::Success, // Key was present and removed
             None => MacroManipulationResult::Failure,    // Key was not present
         }
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = (&String, &MacroDefinition)> {
+        self.macros.iter()
+    }
+
+    pub fn into_iter(
+        self,
+    ) -> impl ExactSizeIterator<Item = (String, MacroDefinition)> + FusedIterator {
+        self.macros.into_iter()
     }
 }
